@@ -1,5 +1,4 @@
 <?php
-<?php
 
 // initialisation de la variable à l'extérieur de la boucle while (valeur de zéro assez commune car le premier élément d'un tableau (les boucles servent souvent a explorer des tableaux) aura pour indice 0)
 $i = 0;
