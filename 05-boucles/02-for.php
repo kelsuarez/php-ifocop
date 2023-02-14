@@ -27,7 +27,7 @@ for($i = 0; $i <= 10; $i++){
         <option value="">Sélectionnez l'année</option>
         <?php for($annee = 1923; $annee <= date('Y') ; $annee++){ 
         echo '<option>' . $annee . '</option>';
-         } ?>
+        } ?>
     </select>
 </form>
 
