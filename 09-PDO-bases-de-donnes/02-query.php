@@ -4,7 +4,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=boutique', 'root', '', array(PDO::AT
 
 // requete pour cibler (grace à la methode Query) un utilisateur en BDD, le résultat sera stocké dans la variable $afficheUser
 $afficheUser = $pdo->query("SELECT * FROM membre WHERE prenom = 'Natasha' ;");
-
+ 
 // affichage non conv de la requete
 echo "<pre>"; var_dump($afficheUser); echo "</pre>";
 
@@ -24,23 +24,3 @@ foreach ($user as $indice => $value) {
         echo $indice . ': ' . $value . '<br>';
     }
 }
-
-
-for($i = 0; $i <= ; $i++){
-    echo "Tour numero" . $i . "<br>";
-}
-
-
-// C:\wamp64\www\php-ifocop\09-PDO-bases-de-donnes\02-query.php:15:
-//     array (size=11)
-//       'id_membre' => string '4' (length=1)
-//       'pseudo' => string 'Black_Widow' (length=11)
-//       'mdp' => string '$2y$10$BVHDnVn4vmcggZsXBwR46OmNdZ0jZjoKAw10VfTzTR8Nh3gaEMHBK' (length=60)
-//       'nom' => string 'Romanoff' (length=8)
-//       'prenom' => string 'Natasha' (length=7)
-//       'email' => string 'blackwidow@gmail.com' (length=20)
-//       'civilite' => string 'femme' (length=5)
-//       'ville' => string 'Paris' (length=5)
-//       'code_postal' => string '75015' (length=5)
-//       'adresse' => string '85 Impasse du rien' (length=18)
-//       'statut' => string '0' (length=1)
