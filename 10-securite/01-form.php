@@ -35,12 +35,25 @@ if($_POST){
     }
 
     if(empty($erreur)){
-        $inscrireUser = $pdo->prepare(" INSERT INTO membre (pseudo, email, mdp) VALUES (:pseudo, :email, :mdp)");
+        // la requete préparée s'impose pour des raisons de sécurité lorsque on doit modifier une BDD (Insertion, Modification ou Suppression). La requete query peut encore utilisée pour sélectionner des éléments en BDD (mais pas pourle Select, Update ou Delete)
+        $inscrireUser = $pdo->prepare(" INSERT INTO membre (pseudo, email, mdp) VALUES (:pseudo, :email, :mdp) ");
+        // la requete préparée est plus longue à mettre en place que la requete query (voir son équivalent un peu en dessous, commentée), mais elle est necessaire pour apporter plus de sécurité lors de l'envoi en BDD
+        // la requete préparée necessite de declarer un bindValue (ou variation avec bindParam) pour chaque input
+        // ce bindValue demande un pointeur nommé (:pseudo, ou :email etc...) pour lui donner son équivalent extrait du formulaire ($_POST[pseudo] ou $_POST[email]) pour envoyer la donnée dans la bonne colonne en BDD
+        // en dernier, bindValue demande un PARAM typé (STR, INT) pour n'envoyer en BDD que la donnée qui à le bon type (pour un code postal, un nombre entier, pour un pseudo, une chaine de caractères etc...)
+        // si le type envoyé ne correspond pas a ce qui est attendu en BDD, la procédure d'envoi est annulée (mesure de protection pas possible avec query)
+        $inscrireUser->bindValue(':pseudo', $_POST['pseudo'], PDO::PARAM_STR);
+        $inscrireUser->bindValue(':email', $_POST['email'], PDO::PARAM_STR);
+        $inscrireUser->bindValue(':mdp', $_POST['mdp'], PDO::PARAM_STR);
+        // en dernier, la requete préparée doit etre exécutée, obligatoirement
+        $inscrireUser->execute();
+
+        // $inscrireUser2 = $pdo->query(" INSERT INTO membre (pseudo, email, mdp) VALUES ($_POST[pseudo], $_POST[email],  $_POST[mdp]) ");
     }
 
 }
 ?>
-
+<!--  -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -53,8 +66,8 @@ if($_POST){
     <?= $erreur ?>
     <form method="POST" action="">
         <label for="pseudo">Pseudo</label><br>
-        <input type="text" id="pseudo" name="pseudo" placeholder="Votre pseudo" maxlength="20" pattern="[a-zA-Z0-9-_.]{3,20}" title="Les caractères acceptés sont les majuscules et minuscule de l'alphabet. Les chiffres de 0 à 9. Les seuls caractères spéciaux acceptés sont - _ . . Votre pseudo devra comporter au minimum 3 caractères sans excéder 20"><br><br>
-
+        <input type="text" id="pseudo" name="pseudo" placeholder="Votre pseudo" maxlength="20"><br><br>
+        <!-- pattern="[a-zA-Z0-9-_.]{3,20}" title="Les caractères acceptés sont les majuscules et minuscule de l'alphabet. Les chiffres de 0 à 9. Les seuls caractères spéciaux acceptés sont - _ . . Votre pseudo devra comporter au minimum 3 caractères sans excéder 20" -->
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email" placeholder="Votre adresse mail"><br><br>
 
