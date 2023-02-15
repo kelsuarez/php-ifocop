@@ -1,4 +1,6 @@
 <?php
+
+$pdo = new PDO('mysql:host=localhost;dbname=boutique', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING, PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8'));
 // traitement PHP pour sécuriser l'envoi de données en BDD (car les protections en Front (pattern etc...) sont très facilement contournables pour un hacker (F12 inspecteur))
 
 // la protection du formulaire devra etre codée dans un if($_POST) pour ne pas générer    d'erreur PHP au premier chargement de la page
@@ -32,6 +34,9 @@ if($_POST){
         $erreur .= "<p>Erreur format mot de passe.<br> Il ne doitpas etre inférieur à trois caractères et ne peut en contenir plus de 20</p>";
     }
 
+    if(empty($erreur)){
+        $inscrireUser = $pdo->prepare(" INSERT INTO membre (pseudo, email, mdp) VALUES (:pseudo, :email, :mdp)");
+    }
 
 }
 ?>
@@ -45,6 +50,7 @@ if($_POST){
     <title>Formulaire</title>
 </head>
 <body>
+    <?= $erreur ?>
     <form method="POST" action="">
         <label for="pseudo">Pseudo</label><br>
         <input type="text" id="pseudo" name="pseudo" placeholder="Votre pseudo" maxlength="20" pattern="[a-zA-Z0-9-_.]{3,20}" title="Les caractères acceptés sont les majuscules et minuscule de l'alphabet. Les chiffres de 0 à 9. Les seuls caractères spéciaux acceptés sont - _ . . Votre pseudo devra comporter au minimum 3 caractères sans excéder 20"><br><br>
